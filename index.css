@@ -1,0 +1,35 @@
+body {
+	background-color: #e9dffb;
+	color: #190934;
+}
+div {
+	float: left;
+	margin-left: 12px;
+	padding: 5px;
+	border-radius: 5px;
+	width: 315px;
+	background-color: #905bec;
+	text-align: center;
+	font-size: large;
+	padding-bottom: 2em;
+	box-shadow: 5px 5px 5px black;
+}
+a {
+	color: #190934;
+	display: block;
+	text-decoration: none;
+	font-weight: bold;
+	text-align: center;
+	text-transform: capitalize;
+	font-size: large;
+	width: 15em;
+	padding: 10px;
+	border-radius: 50px;
+	border: 5px solid #190934;
+}
+a:visited {
+	color: #190934;
+}
+a:hover {
+	background-color: #5a18c9;
+}

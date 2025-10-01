@@ -1,0 +1,20 @@
+body {
+	background-color: #e7f3ef;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 1em;
+}
+a:link {
+	color: #23483c;
+}
+a:focus {
+	color: #79bea8;
+	background-color: #23483c;
+}
+a:active {
+	color: #23483c;
+	background-color: #448D76;
+}
+a:hover {
+    color:#23483c;
+    background-color: #79bea8;
+}

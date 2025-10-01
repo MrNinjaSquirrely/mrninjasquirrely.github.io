@@ -1,0 +1,35 @@
+body {
+	font-family: "Courier New", Courier, monospace;
+	background-color: #e1ecf9;
+}
+a {
+	display: block;
+	text-decoration: none;
+	font-weight: bold;
+	background-color: lightgray;
+	border-left: 10px solid black;
+	width: 15em;
+	padding: 7.5px;
+	border-radius: 4px;
+}
+a:hover {
+	background-color: darkgray;
+}
+a:visited {
+	color: blue;
+}
+a:link {
+	color: blue;
+}
+#dn {
+	border-left: 10px solid red;
+}
+#sydsv {
+	border-left: 10px solid palevioletred;
+}
+#svd {
+	border-left: 10px solid beige;
+}
+#aftbl {
+	border-left: 10px solid yellow;
+}

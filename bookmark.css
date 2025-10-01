@@ -1,0 +1,11 @@
+html {
+	scroll-behavior: smooth;
+}
+body {
+	width: 275px;
+	padding: 5px;
+	margin: auto;
+}
+span {
+	font-size: large;
+}
