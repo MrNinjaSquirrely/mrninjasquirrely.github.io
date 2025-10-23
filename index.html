@@ -2,31 +2,526 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>My Webpages</title>
-		<link rel="stylesheet" href="index.css" />
+		<title>Tetris Responsive Grid</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<style>
+			html,
+			body {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				background: #222;
+				color: #eee;
+				font-family: monospace;
+				width: 100vw;
+				min-height: 100vh;
+				overflow: hidden;
+			}
+			body {
+				height: 100vh;
+				width: 100vw;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				overflow: hidden;
+			}
+			#tetris-container {
+				display: flex;
+				gap: min(2vw, 12px);
+				align-items: flex-start;
+				justify-content: center;
+				width: 100vw;
+				max-width: 100vw;
+				height: 100vh;
+				max-height: 100vh;
+				box-sizing: border-box;
+				padding: 0;
+			}
+			#side-panel {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				min-width: 7vw;
+				width: 14vw;
+				max-width: 110px;
+				margin-top: 2vh;
+			}
+			#saved-label,
+			#next-label {
+				font-size: 1.1em;
+				color: #aaa;
+				margin-bottom: 2px;
+				margin-top: 8px;
+				text-align: center;
+			}
+			#saved-piece,
+			#next-piece {
+				background: #111;
+				border-radius: 6px;
+				box-shadow: 0 2px 12px #000a;
+				margin-bottom: 14px;
+				min-width: 3em;
+				min-height: 3em;
+				text-align: center;
+				padding: 3px 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			#main-panel {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				width: 80vw;
+				max-width: 530px;
+				min-width: 0;
+			}
+			#info {
+				margin-bottom: 8px;
+				font-size: 1.1em;
+				text-align: center;
+				word-break: break-word;
+				max-width: 95vw;
+			}
+			#board {
+				display: grid;
+				grid-template-rows: repeat(var(--rows), 1fr);
+				grid-template-columns: repeat(var(--cols), 1fr);
+				gap: 2px;
+				background: #111;
+				border-radius: 12px;
+				box-shadow: 0 4px 32px #000a;
+				margin-bottom: 10px;
+				width: 62vw;
+				height: 82vh;
+				max-width: 98vw;
+				max-height: calc(98vh - 70px);
+				min-width: 160px;
+				min-height: 230px;
+				aspect-ratio: var(--cols) / var(--rows);
+				transition: width 0.1s, height 0.1s;
+			}
+			.cell {
+				background: #191919;
+				border: 1px solid #444;
+				width: 100%;
+				aspect-ratio: 1/1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				user-select: none;
+				transition: background 0.08s;
+			}
+			.filled {
+				background: #10b2ff;
+				border-color: #55d;
+				box-shadow: 0 0 5px #10b2ff66;
+			}
+			.active {
+				background: #ffe900;
+				border-color: #ff0;
+				box-shadow: 0 0 8px #ffe90099;
+			}
+			.ghost {
+				background: #ffe90055;
+				border-color: #fffa;
+			}
+			#controls {
+				margin-top: 8px;
+				font-size: 1em;
+				color: #aaa;
+				text-align: center;
+			}
+			@media (max-width: 700px) {
+				#tetris-container {
+					flex-direction: column;
+					align-items: center;
+					gap: 0;
+					height: 100vh;
+				}
+				#side-panel {
+					flex-direction: row;
+					gap: 2vw;
+					width: 100vw;
+					max-width: none;
+					min-width: unset;
+					margin-bottom: 8px;
+					margin-top: 0;
+				}
+				#saved-piece,
+				#next-piece {
+					min-width: 2.2em;
+					min-height: 2.2em;
+				}
+				#main-panel {
+					width: 100vw;
+					max-width: none;
+				}
+				#board {
+					width: 94vw;
+					max-width: 99vw;
+					min-width: 0;
+					height: 60vw;
+					max-height: 75vh;
+					min-height: 120px;
+				}
+			}
+		</style>
 	</head>
 	<body>
-		<h1 style="margin-left: 15px">My Webpages</h1>
-		<div>
-			<h2>Kapitel 11</h2>
-			<a href="blank.html">Blank</a>
-			<br />
-			<a href="bookmark.html">bookmark</a>
-			<br />
-			<a href="button.html">button</a>
-			<br />
-			<a href="divpseudo.html">divpseudo</a>
-			<br />
-			<a href="links.html">links</a>
-			<br />
-			<a href="mypages.html">mypages</a>
-			<br />
-			<a href="pseudolink.html">pseudolink</a>
-			<br />
-			<a href="index.html">index</a>
-			<br />
-			<a href="mypages.html">mypages</a>
+		<div id="tetris-container">
+			<div id="side-panel">
+				<div>
+					<div id="saved-label">SAVED</div>
+					<div id="saved-piece"></div>
+				</div>
+				<div>
+					<div id="next-label">NEXT</div>
+					<div id="next-piece"></div>
+				</div>
+			</div>
+			<div id="main-panel">
+				<div id="info">Arrow keys: Move/Rotate | Space: Drop | c: Save</div>
+				<div id="board"></div>
+				<div id="controls">r: Restart</div>
+			</div>
 		</div>
+		<script>
+			const ROWS = 22,
+				COLS = 10; // standard
+			const PIECE_COLORS = [
+				"#00f0f0", // I
+				"#f0f000", // O
+				"#a000f0", // T
+				"#00f000", // S
+				"#f00000", // Z
+				"#0000f0", // J
+				"#f0a000", // L
+			];
+
+			document.getElementById("board").style.setProperty("--rows", ROWS);
+			document.getElementById("board").style.setProperty("--cols", COLS);
+
+			const SHAPES = [
+				// I
+				[[1, 1, 1, 1]],
+				// O
+				[
+					[1, 1],
+					[1, 1],
+				],
+				// T
+				[
+					[0, 1, 0],
+					[1, 1, 1],
+				],
+				// S
+				[
+					[0, 1, 1],
+					[1, 1, 0],
+				],
+				// Z
+				[
+					[1, 1, 0],
+					[0, 1, 1],
+				],
+				// J
+				[
+					[1, 0, 0],
+					[1, 1, 1],
+				],
+				// L
+				[
+					[0, 0, 1],
+					[1, 1, 1],
+				],
+			];
+
+			function randomShape() {
+				const n = Math.floor(Math.random() * SHAPES.length);
+				return { shape: JSON.parse(JSON.stringify(SHAPES[n])), index: n };
+			}
+
+			function rotate(shape) {
+				const rows = shape.length,
+					cols = shape[0].length;
+				const newShape = [];
+				for (let x = 0; x < cols; x++) {
+					newShape[x] = [];
+					for (let y = rows - 1; y >= 0; y--) {
+						newShape[x][rows - 1 - y] = shape[y][x];
+					}
+				}
+				return newShape;
+			}
+
+			function emptyBoard() {
+				return Array.from({ length: ROWS }, () => Array(COLS).fill(-1));
+			}
+
+			let board = emptyBoard();
+			let current = { ...randomShape(), row: 0, col: Math.floor(COLS / 2) - 2 };
+			let nextShape = randomShape();
+			let savedShape = null;
+			let savedIndex = null;
+			let hasSwapped = false;
+			let gameOver = false;
+			let dropInterval = 500;
+			let lastDrop = Date.now();
+			let score = 0;
+
+			function canMove(shape, row, col) {
+				for (let y = 0; y < shape.length; y++)
+					for (let x = 0; x < shape[0].length; x++)
+						if (shape[y][x]) {
+							let newY = row + y,
+								newX = col + x;
+							if (newY < 0 || newY >= ROWS || newX < 0 || newX >= COLS)
+								return false;
+							if (board[newY][newX] !== -1) return false;
+						}
+				return true;
+			}
+
+			function merge() {
+				for (let y = 0; y < current.shape.length; y++)
+					for (let x = 0; x < current.shape[0].length; x++)
+						if (current.shape[y][x])
+							board[current.row + y][current.col + x] = current.index;
+			}
+
+			function clearLines() {
+				let cleared = 0;
+				for (let y = ROWS - 1; y >= 0; y--) {
+					if (board[y].every((cell) => cell !== -1)) {
+						board.splice(y, 1);
+						board.unshift(Array(COLS).fill(-1));
+						cleared++;
+						y++;
+					}
+				}
+				score += cleared * 100;
+			}
+
+			function spawn() {
+				current.shape = nextShape.shape;
+				current.index = nextShape.index;
+				current.row = 0;
+				current.col =
+					Math.floor(COLS / 2) - Math.floor(current.shape[0].length / 2);
+				nextShape = randomShape();
+				hasSwapped = false;
+				if (!canMove(current.shape, current.row, current.col)) gameOver = true;
+			}
+
+			function hardDrop() {
+				while (canMove(current.shape, current.row + 1, current.col)) {
+					current.row++;
+				}
+				tick();
+			}
+
+			function renderPiece(piece, element) {
+				if (!piece) {
+					element.innerHTML = '<span style="color:#444">NONE</span>';
+					return;
+				}
+				let { shape, index } = piece;
+				let html = '<div style="display:inline-block">';
+				for (let y = 0; y < shape.length; y++) {
+					for (let x = 0; x < shape[0].length; x++) {
+						html += shape[y][x]
+							? `<span style="display:inline-block;width:1em;height:1em;background:${PIECE_COLORS[index]};border-radius:0.14em;margin:0.05em;box-shadow:0 0 5px ${PIECE_COLORS[index]}77"></span>`
+							: `<span style="display:inline-block;width:1em;height:1em;"></span>`;
+					}
+					html += "<br>";
+				}
+				html += "</div>";
+				element.innerHTML = html;
+			}
+
+			function render() {
+				const boardDiv = document.getElementById("board");
+				boardDiv.innerHTML = "";
+
+				let display = board.map((row) => row.slice());
+				for (let y = 0; y < current.shape.length; y++)
+					for (let x = 0; x < current.shape[0].length; x++)
+						if (
+							current.shape[y][x] &&
+							current.row + y >= 0 &&
+							current.row + y < ROWS
+						)
+							display[current.row + y][current.col + x] =
+								"active-" + current.index;
+
+				// Optionally show a ghost piece (drop preview)
+				let ghostRow = current.row;
+				while (canMove(current.shape, ghostRow + 1, current.col)) ghostRow++;
+				if (ghostRow > current.row) {
+					for (let y = 0; y < current.shape.length; y++)
+						for (let x = 0; x < current.shape[0].length; x++)
+							if (
+								current.shape[y][x] &&
+								ghostRow + y >= 0 &&
+								ghostRow + y < ROWS &&
+								display[ghostRow + y][current.col + x] === -1
+							)
+								display[ghostRow + y][current.col + x] =
+									"ghost-" + current.index;
+				}
+
+				// Render cells as grid of squares
+				for (let y = 0; y < ROWS; y++) {
+					for (let x = 0; x < COLS; x++) {
+						const cell = document.createElement("div");
+						cell.className = "cell";
+						if (typeof display[y][x] === "number" && display[y][x] >= 0) {
+							cell.classList.add("filled");
+							cell.style.background = PIECE_COLORS[display[y][x]];
+						} else if (
+							typeof display[y][x] === "string" &&
+							display[y][x].startsWith("active-")
+						) {
+							cell.classList.add("active");
+							cell.style.background =
+								PIECE_COLORS[+display[y][x].split("-")[1]];
+						} else if (
+							typeof display[y][x] === "string" &&
+							display[y][x].startsWith("ghost-")
+						) {
+							cell.classList.add("ghost");
+							cell.style.background =
+								PIECE_COLORS[+display[y][x].split("-")[1]];
+						}
+						boardDiv.appendChild(cell);
+					}
+				}
+
+				boardDiv.style.setProperty("--rows", ROWS);
+				boardDiv.style.setProperty("--cols", COLS);
+
+				let infoText = `Score: ${score}`;
+				if (gameOver) infoText += "<br>GAME OVER";
+				document.getElementById("info").innerHTML = infoText;
+
+				renderPiece(savedShape, document.getElementById("saved-piece"));
+				renderPiece(nextShape, document.getElementById("next-piece"));
+			}
+
+			function tick(force = false) {
+				if (canMove(current.shape, current.row + 1, current.col)) {
+					current.row++;
+				} else {
+					merge();
+					clearLines();
+					spawn();
+				}
+				render();
+			}
+
+			function restart() {
+				board = emptyBoard();
+				current = { ...randomShape(), row: 0, col: Math.floor(COLS / 2) - 2 };
+				nextShape = randomShape();
+				savedShape = null;
+				hasSwapped = false;
+				gameOver = false;
+				score = 0;
+				render();
+			}
+
+			function savePiece() {
+				if (hasSwapped || gameOver) return;
+				if (!savedShape) {
+					savedShape = {
+						shape: current.shape.map((row) => [...row]),
+						index: current.index,
+					};
+					spawn();
+				} else {
+					let temp = savedShape;
+					savedShape = {
+						shape: current.shape.map((row) => [...row]),
+						index: current.index,
+					};
+					current.shape = temp.shape.map((row) => [...row]);
+					current.index = temp.index;
+					current.row = 0;
+					current.col =
+						Math.floor(COLS / 2) - Math.floor(current.shape[0].length / 2);
+					if (!canMove(current.shape, current.row, current.col)) {
+						gameOver = true;
+					}
+				}
+				hasSwapped = true;
+				render();
+			}
+
+			document.addEventListener("keydown", (e) => {
+				if (gameOver && e.key !== "r") return;
+				if (e.key === "ArrowLeft") {
+					if (canMove(current.shape, current.row, current.col - 1)) {
+						current.col--;
+						render();
+					}
+				} else if (e.key === "ArrowRight") {
+					if (canMove(current.shape, current.row, current.col + 1)) {
+						current.col++;
+						render();
+					}
+				} else if (e.key === "ArrowDown") {
+					if (canMove(current.shape, current.row + 1, current.col)) {
+						current.row++;
+						render();
+					}
+				} else if (e.key === "ArrowUp") {
+					const rotated = rotate(current.shape);
+					if (canMove(rotated, current.row, current.col)) {
+						current.shape = rotated;
+						render();
+					}
+				} else if (e.key === " ") {
+					hardDrop();
+				} else if (e.key === "r") {
+					restart();
+				} else if (e.key === "c") {
+					savePiece();
+				}
+			});
+
+			function gameLoop() {
+				if (!gameOver && Date.now() - lastDrop > dropInterval) {
+					tick();
+					lastDrop = Date.now();
+				}
+				requestAnimationFrame(gameLoop);
+			}
+
+			// Responsive: adjust board size to fit viewport
+			function fitBoardToViewport() {
+				const board = document.getElementById("board");
+				const container = document.getElementById("main-panel");
+				let vw = window.innerWidth,
+					vh = window.innerHeight;
+				// Try to leave some space for panels/info; board must fit both height and width
+				let availableW = vw * 0.7;
+				let availableH = vh * 0.84;
+				// aspect ratio
+				let ratio = COLS / ROWS;
+				let width = Math.min(availableW, availableH * ratio);
+				let height = width / ratio;
+				// clamp
+				board.style.width = width + "px";
+				board.style.height = height + "px";
+			}
+			window.addEventListener("resize", fitBoardToViewport);
+
+			render();
+			fitBoardToViewport();
+			gameLoop();
+		</script>
 	</body>
 </html>
